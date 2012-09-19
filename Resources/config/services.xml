@@ -1,0 +1,126 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+   
+    <parameters>
+        <parameter key="neutron_mvc.plugin_provider.class">Neutron\MvcBundle\Provider\PluginProvider</parameter>
+        <parameter key="neutron_mvc.widget_provider.class">Neutron\MvcBundle\Provider\WidgetProvider</parameter>
+        <parameter key="neutron_mvc.plugin.factory.class">Neutron\MvcBundle\Plugin\PluginFactory</parameter>
+        <parameter key="neutron_mvc.widget.factory.class">Neutron\MvcBundle\Widget\WidgetFactory</parameter>
+        <parameter key="neutron_mvc.doctrine.plugin_manager.class">Neutron\MvcBundle\Doctrine\AbstractPluginManager</parameter>
+        <parameter key="neutron_mvc.form.type.Panels.class">Neutron\MvcBundle\Form\Type\PanelsType</parameter>
+        <parameter key="neutron_mvc.form.type.panel.class">Neutron\MvcBundle\Form\Type\PanelType</parameter>
+        <parameter key="neutron_mvc.form.type.widget_reference.class">Neutron\MvcBundle\Form\Type\WidgetReferenceType</parameter>
+        
+        <parameter key="neutron_mvc.twig.extension.mvc.class">Neutron\MvcBundle\Twig\Extension\MvcExtension</parameter>
+        <parameter key="neutron_mvc.doctrine.event_subscriber.widget_strategy.class">Neutron\MvcBundle\Doctrine\EventSubscriber\WidgetStrategyEventSubscriber</parameter>
+        <parameter key="neutron_mvc.event_listener.admin_menu.class">Neutron\MvcBundle\EventListener\AdminMenuListener</parameter>
+        <parameter key="neutron_mvc.routing_loader.class">Neutron\MvcBundle\Routing\ExtraLoader</parameter>
+        <parameter key="neutron_mvc.controller.backend.plugin_instance.class">Neutron\MvcBundle\Controller\Backend\PluginInstanceController</parameter>
+        <parameter key="neutron_mvc.form.type.plugin_instance.class">Neutron\MvcBundle\Form\Type\AbstractPluginInstance</parameter>
+        <parameter key="neutron_mvc.form.handler.plugin_instance.class">Neutron\MvcBundle\Form\Handler\AbstractPluginInstanceHandler</parameter>
+    </parameters>
+    
+    <services>
+        <service id="neutron_mvc.plugin_provider" class="%neutron_mvc.plugin_provider.class%">
+            <argument type="service" id="service_container" />
+            <argument type="collection"/>
+        </service>
+
+        <service id="neutron_mvc.widget_provider" class="%neutron_mvc.widget_provider.class%">
+            <argument type="service" id="service_container" />
+            <argument type="collection"/>
+        </service>
+
+        <service id="neutron_mvc.plugin.factory" class="%neutron_mvc.plugin.factory.class%" />
+
+        <service id="neutron_mvc.widget.factory" class="%neutron_mvc.widget.factory.class%" />
+
+        <service id="neutron_mvc.form.type.panels" 
+            class="%neutron_mvc.form.type.panels.class%" scope="request">
+
+            <argument type="service" id="neutron_mvc.plugin_provider" />
+            <argument type="service" id="neutron_mvc.widget_provider" />
+            <argument type="service" id="neutron_assetic" />
+            <argument type="service" id="router" />
+            <argument type="service" id="translator" />
+            <tag name="form.type" alias="neutron_panels" />
+        </service>
+
+        <service id="neutron_mvc.form.type.panel" class="%neutron_mvc.form.type.panel.class%">
+            <tag name="form.type" alias="neutron_panel" />    
+        </service>
+
+        <service id="neutron_mvc.form.type.widget_reference" class="%neutron_mvc.form.type.widget_reference.class%">
+            <tag name="form.type" alias="neutron_widget_reference" />    
+        </service>
+
+        <service id="neutron_mvc.doctrine.plugin_manager" class="%neutron_mvc.doctrine.plugin_manager.class%" abstract="true">
+            <call method="setObjectManager">
+            	<argument type="service" id="object_manager" />
+            </call>
+            
+        </service>
+		
+        <service id="neutron_mvc.twig.extension.mvc" class="%neutron_mvc.twig.extension.mvc.class%" >
+            <argument type="service" id="service_container" />
+            <tag name="twig.extension" />    
+        </service>
+						
+        <service id="neutron_mvc.doctrine.event_subscriber.widget_strategy" class="%neutron_mvc.doctrine.event_subscriber.widget_strategy.class%">
+            <argument type="service" id="service_container" />
+            <tag name="doctrine.event_subscriber" connection="default" />
+        </service>
+        
+        <service id="neutron_mvc.event_listener.admin_menu" class="%neutron_mvc.event_listener.admin_menu.class%">
+        	<argument type="service" id="neutron_mvc.plugin_provider" />
+        	<argument type="service" id="neutron_mvc.widget_provider" />
+        	<tag name="kernel.event_listener" event="neutron_admin.onMenuConfigure" method="onMenuConfigure"/> 
+        </service>
+        
+        <service id="neutron_mvc.routing_loader" class="%neutron_mvc.routing_loader.class%">
+        	<argument>%neutron_mvc.dashboard_controller%</argument>
+        	<argument>%neutron_mvc.controller.backend.category%</argument>
+        	<argument>%neutron_mvc.home_controller%</argument>
+        	<argument>%locale%</argument>
+            <tag name="routing.loader" />
+        </service>
+        
+        
+        
+        <service id="neutron_mvc.controller.backend.plugin_instance" 
+        	class="%neutron_mvc.controller.backend.plugin_instance.class%" abstract="true" >	
+    		<call method="setContainer">
+    			<argument type="service" id="service_container" />
+    		</call>
+        </service>
+        
+        <service id="neutron_mvc.form.type.plugin_instance" 
+        	class="%neutron_mvc.form.type.plugin_instance.class%" abstract="true">	
+        	<call method="setRequest">
+            	<argument type="service" id="request" />
+            </call>
+        	<call method="setAclManager">
+            	<argument type="service" id="neutron_admin.acl.manager" />
+            </call>
+        </service>
+        
+        <service id="neutron_mvc.form.handler.plugin_instance" 
+        	class="%neutron_mvc.form.handler.plugin_instance.class%" 
+        	parent="neutron_component.form.handler"
+        	abstract="true"
+        >	
+            <call method="setObjectManager">
+        		<argument type="service" id="object_manager" />
+        	</call>
+        	<call method="setAclManager">
+            	<argument type="service" id="neutron_admin.acl.manager" />
+            </call>
+        </service>
+    	    
+    </services>
+
+</container>

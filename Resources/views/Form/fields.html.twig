@@ -1,0 +1,85 @@
+{% block neutron_panels_widget %}
+{% spaceless %}
+    <div id="neutron-panels" class="widget-container" data-options="{{ configs|json_encode }}" style="width:590px">
+	<legend>{% trans from "NeutronMvcBundle" %}form.panels.available_widgets{% endtrans %}</legend>
+        <div id="widget-list" >
+            {% if (widgets|length) > 0 %}
+                {% for widget in widgets %}
+                    <div class="widget-item">
+                        <div data-widget="{{ widget.exportOptions()|json_encode }}" class="ui-state-default widget"><span class="widget-label">{{ widget.getLabel() }}</span></div>
+                        <p class="desc">{{ widget.getDescription() }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="desc">{% trans from "NeutronMvcBundle" %}widgets.empty{% endtrans %}</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="widget-container" style="width:310px">
+        <legend>{% trans from "NeutronMvcBundle" %}panels.panels{% endtrans %}</legend>
+        <div id="neutron-plugin-containers">
+           
+            {% if (form|length) > 0 %} 
+                {% for panel in form %}              
+                    <h3><a href="#">{{ panel.vars.label }}</a></h3>
+                    
+                    <div id="{{ panel.vars.data.name }}" class="neutron-sortable" data-panel="{{ panel.vars.data.exportOptions()|json_encode }}" data-prototype="{{ form_row(panel.widgetReferences.vars.prototype)|e }}">
+                        {% for widgets in panel %}
+                            {% for widget in widgets %}
+                                <div data-widget="{{ widget.vars.data.widget.exportOptions|json_encode }}" class="ui-state-default widget">
+                                    <span class="widget-label">{{ widget.vars.data.label|slice(0,35) }}</span>
+                                    <a class="delete-btn" href="#" style="float:right"></a>
+                                    <a href="#" class="edit-btn" style="float:right"></a>
+                                    {{ form_widget(widget.identifier) }}
+                                    {{ form_widget(widget.category) }}
+                                    {{ form_widget(widget.strategyWidgetName) }}
+                                    {{ form_widget(widget.strategyPluginName) }}
+                                    {{ form_widget(widget.strategyPanelName) }}
+                                    {{ form_widget(widget.position) }}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                          
+                        <p {% if(panel.vars.data.widgetReferences|length)  > 0 %}style="display:none"{% endif %}
+                            class="desc">{{ panel.vars.data.description }}</p>
+                    </div>
+
+                {% endfor %}
+            {% else %}
+                {% trans from "NeutronMvcBundle" %}panels.empty{% endtrans %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="neutron-panels-dialog" title="{% trans from 'messages' %}widget_reference.dlg.title{% endtrans %}" style="display:none">
+        <div id="dlg-error-msg-blank" class="ui-state-error ui-corner-all dlg-error-msg" style="display: none;"> 
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
+                <strong>{% trans from 'NeutronMvcBundle' %}widget_reference.dlg.error_msg_blank{% endtrans %}</strong>
+            </p>
+	</div>
+            
+        <div id="dlg-error-msg-exist" class="ui-state-error ui-corner-all dlg-error-msg" style="display: none;"> 
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
+                <strong>{% trans from 'NeutronMvcBundle' %}widget_reference.dlg.error_msg_exist{% endtrans %}</strong>
+            </p>
+	</div>
+	
+        <div>
+            <label>{% trans from 'NeutronMvcBundle' %}widget_reference.dlg.label{% endtrans %}</label>
+            <div>
+                <select id="neutron-widget-reference" class="uniform"></select>
+               
+                <button id="neutron-panels-dialog-save">
+                    {% trans from 'NeutronMvcBundle' %}widget_reference.dlg.btn{% endtrans %}
+                </button>
+            </div>
+        </div>  
+        
+        <p class="desc">{% trans from 'NeutronMvcBundle' %}widget_reference.dlg.desc{% endtrans %}</p>
+    </div>
+
+
+{% endspaceless %}
+{% endblock neutron_panels_widget %}

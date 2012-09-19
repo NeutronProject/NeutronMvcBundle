@@ -1,0 +1,116 @@
+<?xml version="1.0" ?>
+<constraint-mapping xmlns="http://symfony.com/schema/dic/constraint-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping
+        http://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
+
+    <class name="Neutron\MvcBundle\Entity\AbstractCategory">   
+   	       
+              
+			<constraint name="Neutron\ComponentBundle\Validator\Constraint\UniqueTranslatableProperty">
+		        <option name="property">slug</option>
+		        <option name="enableSlugFilter">true</option>
+		        <option name="message">slug.already_used</option>
+		        <option name="groups">
+	                <value>update</value>
+	            </option>
+   	    	</constraint>
+
+        <property name="title">
+        	<constraint name="NotBlank">
+                <option name="message">title.blank</option>
+                <option name="groups">
+                    <value>create</value>
+               	    <value>update</value>
+                </option>
+            </constraint>
+            <constraint name="MinLength">
+                <option name="limit">2</option>
+                <option name="message">title.short</option>
+                <option name="groups">
+                    <value>create</value>
+                    <value>update</value>
+                </option>
+            </constraint>
+            <constraint name="MaxLength">
+                <option name="limit">255</option>
+                <option name="message">long</option>
+                <option name="groups">
+                    <value>create</value>
+                    <value>update</value>
+                </option>
+            </constraint>
+        </property>
+        
+        <property name="name">
+            <constraint name="NotBlank">
+                <option name="message">name.blank</option>
+                <option name="groups">
+                    <value>create</value>
+                    <value>update</value>
+                </option>
+            </constraint>
+            <constraint name="MinLength">
+                <option name="limit">2</option>
+                <option name="message">name.short</option>
+                <option name="groups">
+                    <value>create</value>
+                    <value>update</value>
+                </option>
+            </constraint>
+            <constraint name="MaxLength">
+                <option name="limit">20</option>
+                <option name="message">name.long</option>
+                <option name="groups">
+                    <value>create</value>
+                    <value>update</value>
+                </option>
+            </constraint>
+            <constraint name="Regex">
+                <option name="pattern">/^[A-Z_]*$/</option>
+                <option name="match">true</option>
+                <option name="message">name.alpha</option>
+                <option name="groups">
+                    <value>create</value>
+                    <value>update</value>
+                </option>
+            </constraint>
+        </property>
+        
+        <property name="slug">
+        	 
+        	<constraint name="NotBlank">
+                <option name="message">slug.blank</option>
+                <option name="groups">
+               	    <value>update</value>
+                </option>
+            </constraint>
+            
+            <constraint name="MinLength">
+                <option name="limit">2</option>
+                <option name="message">slug.short</option>
+                <option name="groups">
+                    <value>update</value>
+                </option>
+            </constraint>
+            <constraint name="MaxLength">
+                <option name="limit">255</option>
+                <option name="message">slug.long</option>
+                <option name="groups">
+                    <value>update</value>
+                </option>
+            </constraint>
+        </property>
+        
+        <property name="type">
+        	<constraint name="NotBlank">
+                <option name="message">type.blank</option>
+                <option name="groups">
+                    <value>create</value>
+                </option>
+            </constraint>
+        </property>
+   
+    </class>
+
+</constraint-mapping>

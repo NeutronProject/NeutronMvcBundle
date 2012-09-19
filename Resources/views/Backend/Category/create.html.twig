@@ -1,0 +1,20 @@
+{% extends "NeutronAdminBundle::layout.html.twig" %}
+
+{% block body %}
+<div class="row">
+	<div class="grid12">
+		<article class="panel">
+		 	<header><h2>Headings</h2></header>
+            {{ neutron_form(
+                form, 
+                {'submit_label': 'form.proceed', 'translation_domain': 'NeutronAdminBundle'},
+                {
+                    'cancel': {'label': 'cancel', 'style': 'btn action', 'url': path('neutron_layout.category.management')}
+                }
+            ) }}
+       
+		</article>
+	</div>
+</div>
+
+{% endblock %}

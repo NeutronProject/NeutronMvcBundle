@@ -1,0 +1,55 @@
+@charset "UTF-8";
+
+.widget-container
+{
+    margin-left: 5px;
+    float: left;
+}
+
+.widget-container { list-style-type: none; margin: 0; padding: 0; margin-bottom: 10px; }
+.widget-container .widget-item { margin: 5px; float: left;}
+.widget-container .widget { margin: 5px; padding: 7px; width: 250px; cursor: move;}
+.neutron-sortable > .ui-state-highlight {  margin: 5px; height:30px; width: 263px; }
+
+#widget-list .widget small {
+    font-weight: normal;
+    color: #999;
+    font-size: 7pt;
+}
+
+
+#neutron-plugin-containers {
+    margin: 5px 5px 5px 5px;
+}
+
+
+.neutron-sortable{
+    width: auto;
+    min-height:100px;
+}
+
+#neutron-layout-dialog label {
+    margin-left: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.desc {
+    margin: 10px  !important;
+    line-height: 1 !important;
+    font-size: 7pt;
+    display: block;
+    color: #999;
+}
+
+#neutron-plugin-containers p small {
+  margin: 10px  !important;
+  line-height: 1 !important;
+  color: #999;  
+}
+
+.dlg-error-msg{
+    margin: 10px  !important;
+    padding: 5px !important;
+}
