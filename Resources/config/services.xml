@@ -22,6 +22,7 @@
         <parameter key="neutron_mvc.controller.backend.plugin_instance.class">Neutron\MvcBundle\Controller\Backend\PluginInstanceController</parameter>
         <parameter key="neutron_mvc.form.type.plugin_instance.class">Neutron\MvcBundle\Form\Type\AbstractPluginInstance</parameter>
         <parameter key="neutron_mvc.form.handler.plugin_instance.class">Neutron\MvcBundle\Form\Handler\AbstractPluginInstanceHandler</parameter>
+        <parameter key="neutron_mvc.doctrine.event_subscriber.sluggable.class">Neutron\MvcBundle\Doctrine\EventSubscriber\SluggableSubscriber</parameter>
     </parameters>
     
     <services>
@@ -119,6 +120,12 @@
         	<call method="setAclManager">
             	<argument type="service" id="neutron_admin.acl.manager" />
             </call>
+        </service>
+        
+        <service id="neutron_mvc.doctrine.event_subscriber.sluggable" 
+        	class="%neutron_mvc.doctrine.event_subscriber.sluggable.class%">
+            <argument type="service" id="neutron_component.util.filter.slug" />
+            <tag name="doctrine.event_subscriber" connection="default" />
         </service>
     	    
     </services>

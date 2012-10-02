@@ -5,5 +5,5 @@ interface WidgetManagerInterface
 {
     public function getInstances($locale);
     
-    public function get($identifier);
+    public function get($id);
 }

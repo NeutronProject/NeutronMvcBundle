@@ -5,21 +5,22 @@ use Neutron\MvcBundle\Widget\WidgetInterface;
 
 interface WidgetReferenceInterface
 {
-    public function setIdentifier($identifier);
     
-    public function getIdentifier();
+    public function setPluginInstanceId($pluginInstanceId);
     
-    public function setCategory($category);
+    public function getPluginInstanceId();
+
+    public function setPluginIdentifier($pluginIdentifier);
     
-    public function getCategory();
+    public function getPluginIdentifier();
     
-    public function setStrategyWidgetName($name);
+    public function setWidgetInstanceId($widgetInstanceId);
     
-    public function getStrategyWidgetName();
+    public function getWidgetInstanceId();
     
-    public function setStrategyPluginName($name);
+    public function setWidgetIdentifier($widgetIdentifier);
     
-    public function getStrategyPluginName();
+    public function getWidgetIdentifier();
     
     public function setStrategyPanelName($name);
     

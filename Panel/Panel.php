@@ -64,17 +64,12 @@ class Panel implements PanelInterface
         return isset($this->widgetReferences[$identifier]);
     }
     
-    public function getWidgetReference($identifier)
-    {
-       if ($this->hasWidgetReference($identifier)){
-           return $this->widgetReferences[$identifier];
-       }      
-    }
-    
     public function addWidgetReference(WidgetReferenceInterface $widgetReference)
     {
-        if(!$this->hasWidgetReference($widgetReference->getIdentifier())){
-            $this->widgetReferences[$widgetReference->getIdentifier()] = $widgetReference;
+        $hash = spl_object_hash($widgetReference);
+        
+        if(!$this->hasWidgetReference($hash)){
+            $this->widgetReferences[$hash] = $widgetReference;
         }
         
         return $this;
@@ -98,8 +93,10 @@ class Panel implements PanelInterface
     
     public function removeWidgetReference(WidgetReferenceInterface $widgetReference)
     {
-        if($this->hasWidgetReference($widgetReference->getIdentifier())){
-            unset($this->widgetReferences[$widgetReference->getIdentifier()]);
+        $hash = spl_object_hash($widgetReference);
+        
+        if($this->hasWidgetReference($hash)){
+            unset($this->widgetReferences[$hash]);
         }
         
         return $this;

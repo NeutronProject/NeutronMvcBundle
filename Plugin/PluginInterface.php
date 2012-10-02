@@ -57,4 +57,8 @@ interface PluginInterface
     public function setTreeOptions(array $options);
     
     public function getTreeOptions();
+    
+    public function setExtraData(array $data);
+    
+    public function getExtraData($key = null);
 }

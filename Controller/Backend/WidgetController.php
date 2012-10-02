@@ -13,8 +13,7 @@ class WidgetController extends Controller
         $name = $this->getRequest()->get('name');       
         $widget = $this->get('neutron_mvc.widget_provider')->get($name);
         $manager = $widget->getManager();
-        $locale = $this->container->get('session')
-            ->get('frontend_language', $this->container->getParameter('locale'));
+        $locale = $this->container->get('neutron_admin.helper.application')->getFrontLocale();
         $instances = $manager->getInstances($locale);
         
         if (!empty($instances)){
@@ -30,10 +29,10 @@ class WidgetController extends Controller
     {
         $resolver = new OptionsResolver();
         
-        $resolver->setRequired(array('identifier', 'label'));
+        $resolver->setRequired(array('id', 'label'));
         $resolver->setAllowedTypes(array(
-            'identifier'  => array('string'),        
-            'label'       => array('string'),        
+            'id'    => array('int'),        
+            'label' => array('string'),        
         ));
         
         $resolver->resolve($instance);

@@ -9,7 +9,6 @@
         <parameter key="neutron_mvc.form.handler.category.default.class">Neutron\MvcBundle\Form\Handler\CategoryHandler</parameter>
         <parameter key="neutron_mvc.datagrid.category.class">Neutron\MvcBundle\DataGrid\Category</parameter>
         <parameter key="neutron_mvc.event_listener.category.class">Neutron\MvcBundle\EventListener\CategoryListener</parameter>
-        <parameter key="neutron_mvc.doctrine.event_subscriber.category.class">Neutron\MvcBundle\Doctrine\EventSubscriber\CategorySubscriber</parameter>
         <parameter key="neutron_mvc.category.manager.default.class">Neutron\MvcBundle\Doctrine\CategoryManager</parameter>
         <parameter key="neutron_mvc.tree.category.class">Neutron\MvcBundle\Tree\Category</parameter>
         <parameter key="neutron_mvc.form.event_subscriber.category.class">Neutron\MvcBundle\Form\EventSubscriber\CategorySubscriber</parameter>
@@ -85,11 +84,6 @@
             <tag name="kernel.event_listener" event="neutron_datagrid.onDataResponse" method="onDataResponse" />
         </service>
         
-        <service id="neutron_mvc.doctrine.event_subscriber.category" 
-        	class="%neutron_mvc.doctrine.event_subscriber.category.class%">
-            <argument type="service" id="neutron_component.util.filter.slug" />
-            <tag name="doctrine.event_subscriber" connection="default" />
-        </service>
         
         <service id="neutron_mvc.category.manager.default" 
         	class="%neutron_mvc.category.manager.default.class%" 

@@ -58,7 +58,7 @@ abstract class AbstractPluginInstanceType extends AbstractType
         if (count($this->plugin->getPanels()) > 0){
             $builder->add('panels', 'neutron_panels', array(
                 'plugin' => $this->plugin->getName(),
-                'category' => (int) $this->request->get('id')
+                'pluginIdentifier' => $this->plugin->getName(),
             ));
         }
         

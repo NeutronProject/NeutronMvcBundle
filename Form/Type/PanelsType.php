@@ -79,8 +79,7 @@ class PanelsType extends AbstractType
                     'instances_empty_value' => $translator->trans('instances.empty_value', array(), 'NeutronMvcBundle'),
                     'widget_instance_url' => 
                         $router->generate('neutron_mvc.widget_intances'),
-                    'plugin' => $options->get('plugin'),
-                    'category' => $options->get('category'),
+                    'pluginIdentifier' => $options->get('pluginIdentifier'),
                 );
                 
                 $options = \array_replace_recursive($opts, $configs);
@@ -88,8 +87,11 @@ class PanelsType extends AbstractType
             },
         ));
             
-        $resolver->setRequired(array('plugin', 'category'));
-        $resolver->setAllowedTypes(array('plugin' => array('string'), 'category' => array('string', 'integer')));
+        $resolver->setRequired(array('plugin', 'pluginIdentifier'));
+        $resolver->setAllowedTypes(array(
+            'plugin' => array('string'), 
+            'pluginIdentifier' => array('string'), 
+        ));
     }
     
     public function getName()

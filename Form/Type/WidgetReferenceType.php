@@ -13,13 +13,12 @@ class WidgetReferenceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('identifier', 'hidden')
-            ->add('category', 'hidden')
-            ->add('strategyWidgetName', 'hidden')
-            ->add('strategyPluginName', 'hidden')
+            ->add('pluginInstanceId', 'hidden')
+            ->add('pluginIdentifier', 'hidden')
+            ->add('widgetInstanceId', 'hidden')
+            ->add('widgetIdentifier', 'hidden')
             ->add('strategyPanelName', 'hidden')
             ->add('position', 'hidden')           
-            
         ;
     }
         

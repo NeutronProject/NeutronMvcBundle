@@ -1,6 +1,8 @@
 <?php 
 namespace Neutron\MvcBundle\Doctrine\EventSubscriber;
 
+use Neutron\MvcBundle\Model\Plugin\PluginInstanceInterface;
+
 use Doctrine\ORM\EntityManager;
 
 use Neutron\MvcBundle\Model\Widget\WidgetInstanceInterface;
@@ -27,7 +29,9 @@ class WidgetStrategyEventSubscriber implements EventSubscriber
 {
     protected $container;
     
-    protected $scheduledForDeletionWidgetReferences = array();
+    protected $scheduledForDeletionWidgetReferencesByPluginIdentifier = array();
+    
+    protected $scheduledForDeletionWidgetReferencesByWidgetIdentifier = array();
     
     public function __construct(Container $container)
     {
@@ -41,20 +45,42 @@ class WidgetStrategyEventSubscriber implements EventSubscriber
         
         foreach ($uow->getScheduledEntityDeletions() as $entity) {
         
-            if ($entity instanceof WidgetInstanceInterface){
-                $this->scheduledForDeletionWidgetReferences[] = $entity->getIdentifier();
+            if ($entity instanceof PluginInstanceInterface){ 
+                $this->scheduledForDeletionWidgetReferencesByPluginIdentifier[] = array(
+                    'identifier'       => $entity->getId(),
+                    'pluginIdentifier' => $entity->getIdentifier()
+                );
+            }
+            
+            if ($entity instanceof WidgetInstanceInterface){ 
+                $this->scheduledForDeletionWidgetReferencesByWidgetIdentifier[] =array(
+                    'identifier' => $entity->getId(),
+                    'widgetIdentifier' => $entity->getIdentifier()       
+                );
             }
         }
     }
     
     public function postFlush(PostFlushEventArgs $args)
     {
-        if (count($this->scheduledForDeletionWidgetReferences) > 0){
-            $em = $args->getEntityManager(); 
+        $em = $args->getEntityManager();
+        
+        if (count($this->scheduledForDeletionWidgetReferencesByPluginIdentifier) > 0){
             
-            foreach ($this->scheduledForDeletionWidgetReferences as $identifier){
-                $this->deleteWidgetReferencesByIdentifier($em, $identifier);
-            }          
+            foreach ($this->scheduledForDeletionWidgetReferencesByPluginIdentifier as $data){
+                $this->deleteWidgetReferencesByPluginIdentifier($em, $data['pluginIdentifier'], $data['identifier']);
+            }   
+
+            $this->scheduledForDeletionWidgetReferencesByPluginIdentifier = array();
+        }     
+        
+        if (count($this->scheduledForDeletionWidgetReferencesByWidgetIdentifier) > 0){
+            
+            foreach ($this->scheduledForDeletionWidgetReferencesByWidgetIdentifier as $data){
+                $this->deleteWidgetReferencesByWidgetIdentifier($em, $data['widgetIdentifier'], $data['identifier']);
+            }      
+
+            $this->scheduledForDeletionWidgetReferencesByWidgetIdentifier = array();
         }     
     }
     
@@ -64,7 +90,7 @@ class WidgetStrategyEventSubscriber implements EventSubscriber
         
         if ($entity instanceof WidgetReferenceInterface){
             $widget = $this->container->get('neutron_mvc.widget_provider')
-                        ->get($entity->getStrategyWidgetName());
+                        ->get($entity->getWidgetIdentifier());
             
             $entity->setWidget($widget);
         }
@@ -75,9 +101,16 @@ class WidgetStrategyEventSubscriber implements EventSubscriber
         return array(Events::onFlush, Events::postFlush, Events::postLoad);
     }
     
-    protected function deleteWidgetReferencesByIdentifier(EntityManager $em, $identifier)
+
+    protected function deleteWidgetReferencesByPluginIdentifier(EntityManager $em, $pluginIdentifier, $identifier)
     {
-        $query = $em->createQuery('DELETE FROM Neutron\\MvcBundle\\Entity\\WidgetReference w WHERE w.identifier = ?1');
-        $query->setParameter(1, $identifier)->execute();
+        $query = $em->createQuery('DELETE FROM Neutron\\MvcBundle\\Entity\\WidgetReference w WHERE w.pluginIdentifier = ?1 AND w.identifier = ?2');
+        $query->setParameters(array(1 => $pluginIdentifier, 2 => $identifier))->execute();
+    }
+    
+    protected function deleteWidgetReferencesByWidgetIdentifier(EntityManager $em, $widgetIdentifier, $identifier)
+    {
+        $query = $em->createQuery('DELETE FROM Neutron\\MvcBundle\\Entity\\WidgetReference w WHERE w.widgetIdentifier = ?1 AND w.identifier = ?2');
+        $query->setParameters(array(1 => $widgetIdentifier, 2 => $identifier))->execute();
     }
 }

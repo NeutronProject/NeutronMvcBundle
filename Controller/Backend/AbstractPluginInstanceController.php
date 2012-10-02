@@ -141,7 +141,7 @@ abstract class AbstractPluginInstanceController extends ContainerAware
         $category = $this->getCategory($id);
         $pluginInstance = $this->getPluginInstance($category);
         $seo = $this->getSeo($pluginInstance);
-        $panels = $this->plugin->getManager()->getPanelsForUpdate($id);
+        $panels = $this->plugin->getManager()->getPanelsForUpdate($id, $this->plugin->getName());
     
         return array(
             'general' => $category,

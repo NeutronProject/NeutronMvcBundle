@@ -7,7 +7,7 @@ use Neutron\MvcBundle\Panel\PanelInterface;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class Plugin implements PluginInterface 
+class Plugin implements PluginInterface  
 {   
     
     protected $name;
@@ -29,6 +29,8 @@ class Plugin implements PluginInterface
     protected $panels = array();
     
     protected $treeOptions = array();
+    
+    protected $extraData = array();
     
     
     public function __construct($name)
@@ -194,6 +196,25 @@ class Plugin implements PluginInterface
     public function getTreeOptions()
     {
         return $this->resolveTreeOptions($this->treeOptions);
+    }
+    
+    public function setExtraData(array $data)
+    {
+        $this->extraData = $data;
+        return $this;
+    }
+    
+    public function getExtraData($key = null)
+    {
+        if ($key){
+            if (isset($this->extraData[$key])){
+                return $this->extraData[$key];
+            } else {
+                throw new \InvalidArgumentException(sprintf('Key: "%s" does not exist.', $key));
+            }
+        }
+        
+        return $this->extraData;
     }
     
     protected function validateProperty($value, $propertyName)

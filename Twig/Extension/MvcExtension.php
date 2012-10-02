@@ -62,17 +62,12 @@ class MvcExtension extends \Twig_Extension
         $html = '';
         
         foreach ($panel->getWidgetReferences() as $reference){
-
-            $plugin = $this->getPlugin($reference->getStrategyPluginName());
-            $widget = $reference->getWidget();
             
-            if (!$widget->canUsePlugin($plugin)){
-                continue;
-            }
+            $widget = $reference->getWidget();
             
             $response = $this->container->get('http_kernel')->forward(
                 $widget->getFrontController(), array(
-                    'identifier' => $reference->getIdentifier()
+                    'widgetInstanceId' => $reference->getWidgetInstanceId()
                 )
             );
             
@@ -92,7 +87,7 @@ class MvcExtension extends \Twig_Extension
         $widget = $widgetReference->getWidget();
         $response = $this->container->get('http_kernel')->forward(
             $widget->getFrontController(), array(
-                'identifier' => $widgetReference->getIdentifier()
+                'widgetInstanceId' => $widgetReference->getWidgetInstanceId()
             )
         );
         

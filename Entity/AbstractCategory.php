@@ -1,6 +1,8 @@
 <?php
 namespace Neutron\MvcBundle\Entity;
 
+use Neutron\MvcBundle\Model\SluggableInterface;
+
 use Neutron\MvcBundle\Model\Category\CategoryInterface;
 
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -11,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @Gedmo\Tree(type="nested")
  * @ORM\MappedSuperclass
  */
-abstract class AbstractCategory implements CategoryInterface
+abstract class AbstractCategory implements CategoryInterface, SluggableInterface
 {
     /**
      * @var integer
@@ -48,7 +50,7 @@ abstract class AbstractCategory implements CategoryInterface
     /**
      * @var string 
      *
-     * @ORM\Column(type="string", name="type", length=20, nullable=false, unique=false)
+     * @ORM\Column(type="string", name="type", length=255, nullable=false, unique=false)
      */
     protected $type = 'default';
     

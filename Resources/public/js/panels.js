@@ -1,7 +1,7 @@
 jQuery(document).ready(function(){
     
     var options = jQuery('#neutron-panels').data('options');
-    
+    console.log(options);
     jQuery('#neutron-plugin-containers').accordion({
         active: false, 
         collapsible: true, 
@@ -17,7 +17,7 @@ jQuery(document).ready(function(){
         close: function(event, ui) {
             var item = jQuery(this).data('item');
             var parent = item.parent();
-            if(item.find(':hidden').eq(0).val().length == 0){
+            if(item.find(':hidden').eq(2).val().length == 0){
                 item.remove();
                 var widgets = parent.find('.widget');
             
@@ -40,7 +40,7 @@ jQuery(document).ready(function(){
     jQuery('.widget a.edit-btn').live('click', function(){
        
         dlg.data('item', jQuery(this).parent());
-        openDialog(dlg, options, jQuery(this).parent().find(':hidden').eq(0).val());
+        openDialog(dlg, options, jQuery(this).parent().find(':hidden').eq(2).val());
         return false;
    
     });
@@ -72,31 +72,42 @@ jQuery(document).ready(function(){
         
         var item = dlg.data('item'); 
         
-        var widget_identifier = jQuery('#neutron-widget-reference').val();
+        var widgetIdentifier = item.data('widget').name;
+        
+        var widget_instance_id = jQuery('#neutron-widget-reference').val();
    
         var label = jQuery('#neutron-widget-reference')
-    		.find('option[value="'+ widget_identifier +'"]').text();
+    		.find('option[value="'+ widget_instance_id +'"]').text();
 
         if(label.length > 35){
             label = label.substr(0, 35);
         }
  
-        if(widget_identifier.length == 0){
+        if(widget_instance_id.length == 0){
             jQuery('#dlg-error-msg-blank').fadeIn();
             return false;
-        } else if(item.parent().find(':hidden[value="'+ widget_identifier +'"]').length > 0){
-        	jQuery('#dlg-error-msg-exist').fadeIn();
-            return false;
+        } else if(item.parent().find(':hidden[value="'+ widget_instance_id +'"]').length > 0){
+            var instanceExists = false
+            var widgetInstances = item.parent().find(':hidden[value="'+ widget_instance_id +'"]');
+            jQuery.each(widgetInstances, function(){ 
+                if(jQuery(this).next().val() == widgetIdentifier){
+                    instanceExists  = true;
+                }
+            });
+
+            if(instanceExists){
+                jQuery('#dlg-error-msg-exist').fadeIn();
+                return false;
+            }
         }
 
         var formElms = item.find(':hidden');
-        formElms.eq(0).val(widget_identifier);
-        formElms.eq(1).val(options.category);
-        formElms.eq(2).val(item.data('widget').name);
-        formElms.eq(3).val(options.plugin);
+        formElms.eq(0).val(options.pluginInstanceId);
+        formElms.eq(1).val(options.pluginIdentifier);
+        formElms.eq(2).val(widget_instance_id);
+        formElms.eq(3).val(widgetIdentifier);
         formElms.eq(4).val(item.parent().data('panel').name);
 
-        
         item.find('.widget-label').text(label);
         dlg.dialog('close');
         return false;
@@ -243,9 +254,9 @@ function openDialog(dlg, options, selectedOption)
                 return false;
             }		
 
-            var html = '<option value="" >'+ options.instances_empty_value +'</option>';
+            var html = '<option value="">'+ options.instances_empty_value +'</option>';
             jQuery.each(response, function(k,v){
-                html += '<option value="'+ v.identifier +'">'+ v.label +'</option>';
+                html += '<option value="'+ v.id +'">'+ v.label +'</option>';
             });
 
             jQuery('#neutron-widget-reference').html(html);

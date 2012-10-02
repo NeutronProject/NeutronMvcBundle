@@ -96,6 +96,8 @@ class CategoryCommand extends ContainerAwareCommand
             $root->setTitle($title);
             $root->setSlug($title);
             $root->setType('root');
+            $root->setDisplayed(true);
+            $root->setEnabled(true);
             $manager->persistNode($root);
             $output->writeln('Root node has beed recreated.');
         } else {
@@ -103,7 +105,8 @@ class CategoryCommand extends ContainerAwareCommand
             $root->setTitle($title);
             $root->setSlug($title);
             $root->setType('root');
-            
+            $root->setDisplayed(true);
+            $root->setEnabled(true);
             $manager->updateNode($root);
             
             $output->writeln('Root node has beed updated.');

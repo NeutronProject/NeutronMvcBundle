@@ -1,7 +1,7 @@
 <?php 
 namespace Neutron\MvcBundle\Doctrine\EventSubscriber;
 
-use Neutron\MvcBundle\Model\Category\CategoryInterface;
+use Neutron\MvcBundle\Model\SluggableInterface;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
@@ -13,10 +13,10 @@ use Doctrine\ORM\Events;
 
 use Doctrine\Common\EventSubscriber;
 
-class CategorySubscriber implements EventSubscriber
+class SluggableSubscriber implements EventSubscriber
 {
 
-    const FIELD = 'slug';
+    const FIELD = 'slug'; 
     
     protected $slugFilter;
     
@@ -33,7 +33,7 @@ class CategorySubscriber implements EventSubscriber
         
         foreach ($uow->getScheduledEntityInsertions() as $entity) {
             
-            if ($entity instanceof CategoryInterface){
+            if ($entity instanceof SluggableInterface){
                 $meta = $em->getClassMetadata(get_class($entity));
                 $this->updateSlug($entity, $uow, $meta, self::FIELD);
             }
@@ -41,7 +41,7 @@ class CategorySubscriber implements EventSubscriber
         
         foreach ($uow->getScheduledEntityUpdates() as $entity) {
             
-            if ($entity instanceof CategoryInterface){
+            if ($entity instanceof SluggableInterface){
                 $meta = $em->getClassMetadata(get_class($entity));
                 
                 $changeset = $uow->getEntityChangeSet($entity);

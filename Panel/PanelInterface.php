@@ -19,8 +19,6 @@ interface PanelInterface
     
     public function hasWidgetReference($name);
     
-    public function getWidgetReference($name);
-    
     public function addWidgetReference(WidgetReferenceInterface $widgetReference);
 
     public function setWidgetReferences(array $widgetReferences);

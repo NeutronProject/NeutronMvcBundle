@@ -9,7 +9,7 @@
  */
 namespace Neutron\MvcBundle\Entity;
 
-use Neutron\MvcBundle\Widget\WidgetInterface;
+use Neutron\MvcBundle\Widget\WidgetInterface; 
 
 use Neutron\MvcBundle\Model\Widget\WidgetReferenceInterface;
 
@@ -22,13 +22,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * 
  * @ORM\Table(name="neutron_widget_reference", indexes={
- *         @ORM\Index( name="widget_reference_idx", columns={"widget", "plugin", "panel", "widget_identifier", "category"})
+ *         @ORM\Index( name="widget_reference_idx", columns={"plugin_instance_id", "plugin_identifier", "panel", "widget_instance_id", "widget_identifier"})
  *     })
  * )
  * @ORM\Entity(repositoryClass="Neutron\MvcBundle\Entity\Repository\WidgetReferenceRepository")
  * @UniqueEntity("identifier")
  */
-class WidgetReference implements WidgetReferenceInterface
+class WidgetReference implements WidgetReferenceInterface 
 {
     /**
      * @var integer 
@@ -38,23 +38,48 @@ class WidgetReference implements WidgetReferenceInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-        
-    /**
-     * @var string 
-     *
-     * @ORM\Column(type="string", name="widget_identifier", length=50, nullable=false, unique=false)
-     * @Assert\NotBlank()
-     */
-    protected $identifier;
     
     /**
      * @var integer
      *
-     * @Assert\Type(type="string")
+     * @Assert\Type(type="integer")
      * @Assert\NotBlank()
-     * @ORM\Column(type="string", name="category", length=50, nullable=false, unique=false)
+     * @ORM\Column(type="integer", name="plugin_instance_id", length=10, nullable=false, unique=false)
      */
-    protected $category;
+    protected $pluginInstanceId;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", name="plugin_identifier", length=150, nullable=false, unique=false)
+     * @Assert\NotBlank()
+     */
+    protected $pluginIdentifier;
+    
+    /**
+     * @var integer
+     * 
+     * @Assert\NotBlank()
+     * @ORM\Column(type="integer", name="widget_instance_id", length=10, nullable=false, unique=false)
+     */
+    protected $widgetInstanceId;
+        
+    /**
+     * @var string 
+     *
+     * @ORM\Column(type="string", name="widget_identifier", length=150, nullable=false, unique=false)
+     * @Assert\NotBlank()
+     */
+    protected $widgetIdentifier;
+    
+
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank()
+     * @ORM\Column(type="string", name="panel", length=50, nullable=false, unique=false)
+     */
+    protected $strategyPanelName;
     
     /**
      * @var integer
@@ -64,32 +89,7 @@ class WidgetReference implements WidgetReferenceInterface
      * @ORM\Column(name="position", type="integer")
      */
     protected $position;
-    
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     * @ORM\Column(type="string", name="plugin", length=50, nullable=false, unique=false)
-     */
-    protected $strategyPluginName;
-    
 
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     * @ORM\Column(type="string", name="widget", length=50, nullable=false, unique=false)
-     */
-    protected $strategyWidgetName;
-    
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     * @ORM\Column(type="string", name="panel", length=50, nullable=false, unique=false)
-     */
-    protected $strategyPanelName;
-    
     /**
      * @var WidgetInterface
      */
@@ -100,48 +100,48 @@ class WidgetReference implements WidgetReferenceInterface
         return $this->id;
     }
     
-    public function setIdentifier($identifier)
+    public function setPluginInstanceId($pluginInstanceId) 
     {
-        $this->identifier = (string) $identifier;     
+        $this->pluginInstanceId = (int) $pluginInstanceId;   
         return $this;
     }
     
-    public function getIdentifier()
+    public function getPluginInstanceId()
     {
-        return $this->identifier;
+        return $this->pluginInstanceId;
     }
     
-    public function setCategory($category)
+    public function setPluginIdentifier($pluginIdentifier)
     {
-        $this->category = (string) $category;
+        $this->pluginIdentifier = (string) $pluginIdentifier;
         return $this;
     }
     
-    public function getCategory()
+    public function getPluginIdentifier()
     {
-        return $this->category;
+        return $this->pluginIdentifier;
     }
     
-    public function setStrategyWidgetName($name)
+    public function setWidgetIdentifier($widgetIdentifier)
     {
-        $this->strategyWidgetName = (string) $name;
+        $this->widgetIdentifier = (string) $widgetIdentifier;
         return $this;
     }
     
-    public function getStrategyWidgetName()
+    public function getWidgetIdentifier()
     {
-        return $this->strategyWidgetName;
+        return $this->widgetIdentifier;
     }
     
-    public function setStrategyPluginName($name)
+    public function setWidgetInstanceId($widgetInstanceId)
     {
-        $this->strategyPluginName = (string) $name;
+        $this->widgetInstanceId = (int) $widgetInstanceId;
         return $this;
     }
     
-    public function getStrategyPluginName()
+    public function getWidgetInstanceId()
     {
-        return $this->strategyPluginName;
+        return $this->widgetInstanceId;
     }
     
     public function setStrategyPanelName($name)
@@ -181,7 +181,7 @@ class WidgetReference implements WidgetReferenceInterface
         
     public function getWidgetInstance()
     {
-        return $this->getWidget()->getManager()->get($this->identifier);
+        return $this->getWidget()->getManager()->get($this->widgetInstanceId);
     }
     
     public function getLabel()

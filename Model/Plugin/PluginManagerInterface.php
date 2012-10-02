@@ -31,13 +31,13 @@ interface PluginManagerInterface
     
     public function getPlugin();
     
-    public function getPanelsForUpdate($category);
+    public function getPanelsForUpdate($pluginInstanceId, $pluginIdentifier);
     
-    public function updatePanels(array $panels);
+    public function updatePanels($pluginInstanceId, array $panels);
     
-    public function loadPanels($category, $loadAssets = false);
+    public function loadPanels($pluginInstanceId, $pluginIdentifier, $loadAssets = false);
     
     public function loadWidgetAssets(WidgetInterface $widget);
     
-    public function getWidgetReferencesByPanel($category, $strategyPanelName);
+    public function getWidgetReferencesByPanel($pluginInstanceId, $pluginIdentifier, $strategyPanelName);
 }

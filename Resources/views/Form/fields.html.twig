@@ -30,10 +30,10 @@
                                     <span class="widget-label">{{ widget.vars.data.label|slice(0,35) }}</span>
                                     <a class="delete-btn" href="#" style="float:right"></a>
                                     <a href="#" class="edit-btn" style="float:right"></a>
-                                    {{ form_widget(widget.identifier) }}
-                                    {{ form_widget(widget.category) }}
-                                    {{ form_widget(widget.strategyWidgetName) }}
-                                    {{ form_widget(widget.strategyPluginName) }}
+                                    {{ form_widget(widget.pluginInstanceId) }}
+                                    {{ form_widget(widget.pluginIdentifier) }}
+                                    {{ form_widget(widget.widgetInstanceId) }}
+                                    {{ form_widget(widget.widgetIdentifier) }}
                                     {{ form_widget(widget.strategyPanelName) }}
                                     {{ form_widget(widget.position) }}
                                 </div>

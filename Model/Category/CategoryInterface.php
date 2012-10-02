@@ -5,9 +5,6 @@ use Neutron\TreeBundle\Model\TreeNodeInterface;
 
 interface CategoryInterface extends TreeNodeInterface
 {   
-    public function setSlug($slug);
-    
-    public function getSlug();
     
     public function setLinkTarget($target);
     

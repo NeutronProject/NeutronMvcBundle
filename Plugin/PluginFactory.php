@@ -3,7 +3,7 @@ namespace Neutron\MvcBundle\Plugin;
 
 use Neutron\MvcBundle\Panel\Panel;
 
-class PluginFactory implements PluginFactoryInterface
+class PluginFactory implements PluginFactoryInterface 
 {
     public function createPlugin($name)
     {

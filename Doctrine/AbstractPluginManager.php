@@ -11,7 +11,7 @@ use Neutron\MvcBundle\Model\Plugin\PluginManagerInterface;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-class AbstractPluginManager implements PluginManagerInterface  
+class AbstractPluginManager implements PluginManagerInterface   
 {
     
     const WIDGET_REFERENCE = 'Neutron\\MvcBundle\\Entity\\WidgetReference';
@@ -98,19 +98,19 @@ class AbstractPluginManager implements PluginManagerInterface
         return $this->repository->findBy($criteria);
     }
     
-    public function getWidgetReferencesByPanel($category, $strategyPanelName)
+    public function getWidgetReferencesByPanel($pluginInstanceId, $pluginIdentifier, $strategyPanelName)
     {
-        return $this->widgetReferenceRepository->getWidgetReferencesBypanel(
-            $category, $this->getPlugin()->getName(), $strategyPanelName
+        return $this->widgetReferenceRepository->getWidgetReferencesByPanel(
+            $pluginInstanceId, $pluginIdentifier, $strategyPanelName
         );
     }
     
-    public function getPanelsForUpdate($category)
+    public function getPanelsForUpdate($pluginInstanceId, $pluginIdentifier)
     {
         $panels = array();
         foreach ($this->getPlugin()->getPanels() as $panel){
             $widgetReferences =
-                $this->getWidgetReferencesByPanel($category, $panel->getName());
+                $this->getWidgetReferencesByPanel($pluginInstanceId, $pluginIdentifier, $panel->getName());
             $this->takeSnapshot($widgetReferences);
             $panel->setWidgetReferences($widgetReferences);
             $panels[$panel->getName()] = $panel;
@@ -119,10 +119,11 @@ class AbstractPluginManager implements PluginManagerInterface
         return $panels;
     }
     
-    public function updatePanels(array $panels, $andFlush = false)
+    public function updatePanels($pluginInstanceId, array $panels, $andFlush = false)
     {
         foreach ($panels as $panel){
             foreach ($panel->getWidgetReferences() as $widgetReference){
+                $widgetReference->setPluginInstanceId((int) $pluginInstanceId);
                 $hash = \spl_object_hash($widgetReference);
                 if (array_key_exists($hash, $this->snapshot)){
                     unset($this->snapshot[$hash]);
@@ -139,7 +140,7 @@ class AbstractPluginManager implements PluginManagerInterface
         
     }
     
-    public function loadPanels($category, $loadAssets = false)
+    public function loadPanels($pluginInstanceId, $pluginIdentifier, $loadAssets = false)
     {
         foreach ($this->getPlugin()->getPanels() as $panel){
              
@@ -148,7 +149,7 @@ class AbstractPluginManager implements PluginManagerInterface
             }
     
             $widgetReferences =
-                $this->getWidgetReferencesByPanel($category, $panel->getName());
+                $this->getWidgetReferencesByPanel($pluginInstanceId, $pluginIdentifier, $panel->getName());
     
             $panel->setWidgetReferences($widgetReferences);
             $panel->initialize(true);
