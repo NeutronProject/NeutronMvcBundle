@@ -47,14 +47,14 @@ class WidgetStrategyEventSubscriber implements EventSubscriber
         
             if ($entity instanceof PluginInstanceInterface){ 
                 $this->scheduledForDeletionWidgetReferencesByPluginIdentifier[] = array(
-                    'identifier'       => $entity->getId(),
+                    'pluginInstanceId' => $entity->getId(),
                     'pluginIdentifier' => $entity->getIdentifier()
                 );
             }
             
             if ($entity instanceof WidgetInstanceInterface){ 
                 $this->scheduledForDeletionWidgetReferencesByWidgetIdentifier[] =array(
-                    'identifier' => $entity->getId(),
+                    'widgetInstanceId' => $entity->getId(),
                     'widgetIdentifier' => $entity->getIdentifier()       
                 );
             }
@@ -68,7 +68,7 @@ class WidgetStrategyEventSubscriber implements EventSubscriber
         if (count($this->scheduledForDeletionWidgetReferencesByPluginIdentifier) > 0){
             
             foreach ($this->scheduledForDeletionWidgetReferencesByPluginIdentifier as $data){
-                $this->deleteWidgetReferencesByPluginIdentifier($em, $data['pluginIdentifier'], $data['identifier']);
+                $this->deleteWidgetReferencesByPluginIdentifier($em, $data['pluginIdentifier'], $data['pluginInstanceId']);
             }   
 
             $this->scheduledForDeletionWidgetReferencesByPluginIdentifier = array();
@@ -77,7 +77,7 @@ class WidgetStrategyEventSubscriber implements EventSubscriber
         if (count($this->scheduledForDeletionWidgetReferencesByWidgetIdentifier) > 0){
             
             foreach ($this->scheduledForDeletionWidgetReferencesByWidgetIdentifier as $data){
-                $this->deleteWidgetReferencesByWidgetIdentifier($em, $data['widgetIdentifier'], $data['identifier']);
+                $this->deleteWidgetReferencesByWidgetIdentifier($em, $data['widgetIdentifier'], $data['widgetInstanceId']);
             }      
 
             $this->scheduledForDeletionWidgetReferencesByWidgetIdentifier = array();
@@ -102,15 +102,15 @@ class WidgetStrategyEventSubscriber implements EventSubscriber
     }
     
 
-    protected function deleteWidgetReferencesByPluginIdentifier(EntityManager $em, $pluginIdentifier, $identifier)
+    protected function deleteWidgetReferencesByPluginIdentifier(EntityManager $em, $pluginIdentifier, $pluginInstanceId)
     {
-        $query = $em->createQuery('DELETE FROM Neutron\\MvcBundle\\Entity\\WidgetReference w WHERE w.pluginIdentifier = ?1 AND w.identifier = ?2');
-        $query->setParameters(array(1 => $pluginIdentifier, 2 => $identifier))->execute();
+        $query = $em->createQuery('DELETE FROM Neutron\\MvcBundle\\Entity\\WidgetReference w WHERE w.pluginIdentifier = ?1 AND w.pluginInstanceId = ?2');
+        $query->setParameters(array(1 => $pluginIdentifier, 2 => $pluginInstanceId))->execute();
     }
     
     protected function deleteWidgetReferencesByWidgetIdentifier(EntityManager $em, $widgetIdentifier, $identifier)
     {
-        $query = $em->createQuery('DELETE FROM Neutron\\MvcBundle\\Entity\\WidgetReference w WHERE w.widgetIdentifier = ?1 AND w.identifier = ?2');
+        $query = $em->createQuery('DELETE FROM Neutron\\MvcBundle\\Entity\\WidgetReference w WHERE w.widgetIdentifier = ?1 AND w.widgetInstanceId = ?2');
         $query->setParameters(array(1 => $widgetIdentifier, 2 => $identifier))->execute();
     }
 }

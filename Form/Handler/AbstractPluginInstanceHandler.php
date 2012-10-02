@@ -41,7 +41,7 @@ abstract class AbstractPluginInstanceHandler extends AbstractFormHandler
         
         if (count($this->plugin->getPanels()) > 0){
             $panels = $this->form->get('panels')->getData();
-            $pluginManager->updatePanels($this->request->get('id'), $panels);
+            $pluginManager->updatePanels($pluginInstance->getId(), $panels);
         }
         
         $acl = $this->form->get('acl')->getData();
