@@ -42,41 +42,6 @@
             </constraint>
         </property>
         
-        <property name="name">
-            <constraint name="NotBlank">
-                <option name="message">name.blank</option>
-                <option name="groups">
-                    <value>create</value>
-                    <value>update</value>
-                </option>
-            </constraint>
-            <constraint name="MinLength">
-                <option name="limit">2</option>
-                <option name="message">name.short</option>
-                <option name="groups">
-                    <value>create</value>
-                    <value>update</value>
-                </option>
-            </constraint>
-            <constraint name="MaxLength">
-                <option name="limit">20</option>
-                <option name="message">name.long</option>
-                <option name="groups">
-                    <value>create</value>
-                    <value>update</value>
-                </option>
-            </constraint>
-            <constraint name="Regex">
-                <option name="pattern">/^[A-Z_]*$/</option>
-                <option name="match">true</option>
-                <option name="message">name.alpha</option>
-                <option name="groups">
-                    <value>create</value>
-                    <value>update</value>
-                </option>
-            </constraint>
-        </property>
-        
         <property name="slug">
         	 
         	<constraint name="NotBlank">

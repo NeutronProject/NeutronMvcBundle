@@ -65,7 +65,7 @@ abstract class AbstractPluginInstanceType extends AbstractType
         if ($this->aclManager->isAclEnabled()){
             $builder->add('acl', 'neutron_admin_form_acl_collection', array(
                 'masks' => array(
-                    'VIEW'     => 'View',
+                    'VIEW' => 'View',
                 ),
             ));
         }

@@ -48,6 +48,16 @@ class CategoryManager implements CategoryManagerInterface
         $this->translatable = $translatable;
     }
     
+    public function findOneBy(array $criteria)
+    {
+        return $this->repository->findOneBy($criteria);
+    }
+    
+    public function findBy(array $criteria)
+    {
+        return $this->repository->findBy($criteria);
+    }
+    
     public function getQueryBuilderForDataGrid()
     {
         return $this->repository->getQueryBuilderForDataGrid();
@@ -69,7 +79,7 @@ class CategoryManager implements CategoryManagerInterface
             $stack = array();
             foreach ($categories as $category) {
                 $item = array(
-                    'name' => $category['name'],
+                    'name' => $category['type'] . $category['id'],
                     'label' => $category['title'],
                     'route' => 'neutron_mvc.distributor',
                     'routeParameters' => array('slug' => $category['slug']),

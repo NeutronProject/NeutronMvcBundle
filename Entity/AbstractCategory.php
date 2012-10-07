@@ -25,13 +25,6 @@ abstract class AbstractCategory implements CategoryInterface, SluggableInterface
     protected $id;
     
     /**
-     * @var string 
-     *
-     * @ORM\Column(type="string", name="name", length=20, nullable=false, unique=true)
-     */
-    protected $name;
-    
-    /**
      * @var string
      * 
      * @Gedmo\Translatable

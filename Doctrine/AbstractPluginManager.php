@@ -150,7 +150,7 @@ class AbstractPluginManager implements PluginManagerInterface
     
             $widgetReferences =
                 $this->getWidgetReferencesByPanel($pluginInstanceId, $pluginIdentifier, $panel->getName());
-    
+
             $panel->setWidgetReferences($widgetReferences);
             $panel->initialize(true);
             if($loadAssets === true){

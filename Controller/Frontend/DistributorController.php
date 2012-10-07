@@ -33,7 +33,7 @@ class DistributorController extends Controller
             throw new NotFoundHttpException();
         }
         
-        if (false === $this->get('neutron_admin.acl.manager')->isGranted($category, 'VIEW')){
+        if (false === $this->container->get('neutron_admin.acl.manager')->isGranted($category, 'VIEW')){
             throw new AccessDeniedException();
         }
         

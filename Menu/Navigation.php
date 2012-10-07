@@ -26,6 +26,16 @@ class Navigation extends ContainerAware
         $pages = $this->container->get('neutron_mvc.category.manager')->buildNavigation();
         
         $menu = $factory->createFromArray($pages);
+        $root = $menu->getRoot();
+        
+        $home = $factory->createItem('home', array(
+            'label' => $this->container->get('translator')->trans('menu.home', array(), 'NeutronMvcBundle'),
+            'route' => 'frontend_home',
+        ));
+        
+        $root->addChild($home);
+        
+        $root->moveChildToPosition($home, 0);
         
         $this->container->get('event_dispatcher')
             ->dispatch(AdminEvents::onMenuConfigure, new ConfigureMenuEvent(self::IDENTIFIER, $factory, $menu));

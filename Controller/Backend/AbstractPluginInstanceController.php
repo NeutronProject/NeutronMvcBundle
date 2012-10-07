@@ -1,6 +1,8 @@
 <?php
 namespace Neutron\MvcBundle\Controller\Backend;
 
+use Neutron\MvcBundle\Model\Category\CategoryInterface;
+
 use Neutron\MvcBundle\Plugin\PluginInterface;
 
 use Symfony\Component\Form\FormInterface;
@@ -16,8 +18,6 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 use Neutron\MvcBundle\Model\Plugin\PluginInstanceInterface;
 
 use Neutron\SeoBundle\Model\SeoInterface;
-
-use Neutron\TreeBundle\Model\TreeNodeInterface;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -90,7 +90,7 @@ abstract class AbstractPluginInstanceController extends ContainerAware
         return  new Response($template); 
     }
     
-    protected function doDelete(TreeNodeInterface $category, PluginInstanceInterface $pluginInstance)
+    protected function doDelete(CategoryInterface $category, PluginInstanceInterface $pluginInstance)
     {
         $this->container->get('neutron_admin.acl.manager')
             ->deleteObjectPermissions(ObjectIdentity::fromDomainObject($pluginInstance->getCategory()));
@@ -112,7 +112,7 @@ abstract class AbstractPluginInstanceController extends ContainerAware
         return $category;
     }
     
-    protected function getPluginInstance(TreeNodeInterface $category)
+    protected function getPluginInstance(CategoryInterface $category)
     {
         $pluginInstance = $this->plugin->getManager()->findOneBy(array('category' => $category));
     
