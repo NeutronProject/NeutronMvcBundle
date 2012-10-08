@@ -11,6 +11,7 @@
         <parameter key="neutron_mvc.plugin.factory.class">Neutron\MvcBundle\Plugin\PluginFactory</parameter>
         <parameter key="neutron_mvc.widget.factory.class">Neutron\MvcBundle\Widget\WidgetFactory</parameter>
         <parameter key="neutron_mvc.doctrine.plugin_manager.class">Neutron\MvcBundle\Doctrine\AbstractPluginManager</parameter>
+        <parameter key="neutron_mvc.doctrine.manager.class">Neutron\MvcBundle\Doctrine\MvcManager</parameter>
         <parameter key="neutron_mvc.form.type.Panels.class">Neutron\MvcBundle\Form\Type\PanelsType</parameter>
         <parameter key="neutron_mvc.form.type.panel.class">Neutron\MvcBundle\Form\Type\PanelType</parameter>
         <parameter key="neutron_mvc.form.type.widget_reference.class">Neutron\MvcBundle\Form\Type\WidgetReferenceType</parameter>
@@ -62,6 +63,16 @@
         <service id="neutron_mvc.doctrine.plugin_manager" class="%neutron_mvc.doctrine.plugin_manager.class%" abstract="true">
             <call method="setObjectManager">
             	<argument type="service" id="object_manager" />
+            </call>
+            
+        </service>
+        
+        <service id="neutron_mvc.doctrine.manager" class="%neutron_mvc.doctrine.manager.class%" scope="request">
+            <call method="setObjectManager">
+            	<argument type="service" id="object_manager" />
+            </call>
+            <call method="setAssetic">
+            	<argument type="service" id="neutron_assetic" />
             </call>
             
         </service>

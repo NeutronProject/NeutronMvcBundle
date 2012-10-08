@@ -1,6 +1,8 @@
 <?php 
 namespace Neutron\MvcBundle\Plugin;
 
+use Neutron\MvcBundle\Model\MvcManagerInterface;
+
 use Neutron\MvcBundle\Model\Plugin\PluginManagerInterface;
 
 use Neutron\MvcBundle\Panel\PanelInterface;
@@ -25,6 +27,8 @@ class Plugin implements PluginInterface
     protected $frontController;
     
     protected $manager;
+    
+    protected $mvcManager;
     
     protected $panels = array();
     
@@ -134,6 +138,18 @@ class Plugin implements PluginInterface
     {
         $this->validateProperty($this->manager, 'manager');
         return $this->manager;
+    }
+    
+    public function setMvcManager(MvcManagerInterface $mvcManager)
+    {
+        $this->mvcManager = $mvcManager;
+        return $this;
+    }
+    
+    public function getMvcManager()
+    {
+        $this->validateProperty($this->mvcManager, 'mvcManager');
+        return $this->mvcManager;
     }
     
     public function hasPanel($name)
