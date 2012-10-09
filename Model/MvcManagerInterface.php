@@ -1,6 +1,8 @@
 <?php 
 namespace Neutron\MvcBundle\Model;
 
+use Neutron\Bundle\AsseticBundle\Controller\AsseticController;
+
 use Neutron\MvcBundle\Widget\WidgetInterface;
 
 use Neutron\MvcBundle\Plugin\PluginInterface;

@@ -28,7 +28,7 @@ class Plugin implements PluginInterface
     
     protected $manager;
     
-    protected $mvcManager;
+    protected $managerServiceId;
     
     protected $panels = array();
     
@@ -130,7 +130,6 @@ class Plugin implements PluginInterface
     public function setManager(PluginManagerInterface $manager)
     {
         $this->manager = $manager;
-        $manager->setPlugin($this);
         return $this;
     }
     
@@ -140,16 +139,16 @@ class Plugin implements PluginInterface
         return $this->manager;
     }
     
-    public function setMvcManager(MvcManagerInterface $mvcManager)
+    public function setManagerServiceId($managerServicesId)
     {
-        $this->mvcManager = $mvcManager;
+        $this->managerServiceId = (string) $managerServicesId;
         return $this;
     }
     
-    public function getMvcManager()
+    public function getManagerServiceId()
     {
-        $this->validateProperty($this->mvcManager, 'mvcManager');
-        return $this->mvcManager;
+        $this->validateProperty($this->managerServiceId, 'managerServiceId');
+        return $this->managerServiceId;
     }
     
     public function hasPanel($name)

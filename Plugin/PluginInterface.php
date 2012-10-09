@@ -7,6 +7,11 @@ use Neutron\MvcBundle\Panel\PanelInterface;
 
 interface PluginInterface
 {   
+    const CHILDREN_STRATEGY_SELF = 'self';
+    
+    const CHILDREN_STRATEGY_NONE = 'none';
+    
+    const CHILDREN_STRATEGY_ALL = 'all';
     
     public function setName($name);
     

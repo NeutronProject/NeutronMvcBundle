@@ -26,8 +26,9 @@ class CategoryHandler extends AbstractFormHandler
         $category = $this->form->getData();
         $this->treeManager->persistAsLastChildOf($category, $category->getParent());
         $plugin = $this->pluginProvider->get($this->form->getData()->getType());
-        $pluginInstanceManager = $plugin->getManager();
-        $pluginInstanceManager->create($category, true);
+        $pluginInstance = $plugin->getManager()->create();
+        $pluginInstance->setCategory($category);
+        $plugin->getManager()->update($pluginInstance, true);
     }
     
 

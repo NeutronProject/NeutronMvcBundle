@@ -38,7 +38,7 @@ class NeutronMvcExtension extends Extension
         $container->setParameter('neutron_mvc.dashboard_controller', $config['dashboard_controller']);
         $container->setParameter('neutron_mvc.home_controller', $config['home_controller']);
         $container->setParameter('neutron_mvc.translation_domain', $config['translation_domain']);
-        $container->setAlias('neutron_mvc.manager', 'neutron_mvc.manager');
+        $container->setAlias('neutron_mvc.mvc_manager', 'neutron_mvc.doctrine.mvc_manager');
     }
     
     private function loadCategory(array $config, ContainerBuilder $container, XmlFileLoader $loader)
