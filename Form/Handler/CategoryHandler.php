@@ -1,6 +1,8 @@
 <?php
 namespace Neutron\MvcBundle\Form\Handler;
 
+use Neutron\MvcBundle\Provider\PluginProvider;
+
 use Neutron\TreeBundle\Model\TreeManagerFactoryInterface;
 
 use Neutron\MvcBundle\Provider\PluginProviderInterface;
@@ -10,14 +12,9 @@ use Neutron\ComponentBundle\Form\Handler\AbstractFormHandler;
 class CategoryHandler extends AbstractFormHandler
 { 
     protected $treeManager;
-    protected $pluginProvider;
-    protected $categoryClassName;
 
-    public function __construct(PluginProviderInterface $pluginProvider, 
-            TreeManagerFactoryInterface $treeManagerFactory, $categoryClass)
+    public function __construct(TreeManagerFactoryInterface $treeManagerFactory, $categoryClass)
     {
-
-        $this->pluginProvider = $pluginProvider;
         $this->treeManager = $treeManagerFactory->getManagerForClass($categoryClass);
     }
     
@@ -25,20 +22,24 @@ class CategoryHandler extends AbstractFormHandler
     {
         $category = $this->form->getData();
         $this->treeManager->persistAsLastChildOf($category, $category->getParent());
-        $plugin = $this->pluginProvider->get($this->form->getData()->getType());
-        $pluginInstance = $plugin->getManager()->create();
+        $plugin = $this->container->get('neutron_mvc.plugin_provider')
+            ->get($this->form->getData()->getType());
+
+        $pluginManager = $this->container->get($plugin->getManagerServiceId());
+        $pluginInstance = $pluginManager->create();
         $pluginInstance->setCategory($category);
-        $plugin->getManager()->update($pluginInstance, true);
+        $pluginManager->update($pluginInstance, true);
     }
     
 
     public function getRedirectUrl()
     {
         $category = $this->form->getData();
-        $updateRoute = $this->pluginProvider
-            ->get($category->getType())->getUpdateRoute();
+        $plugin = $this->container->get('neutron_mvc.plugin_provider')
+            ->get($category->getType());
         
-        return $this->router->generate($updateRoute, array('id' => $category->getId()), true);
+        return $this->container->get('router')
+            ->generate($plugin->getUpdateRoute(), array('id' => $category->getId()), true);
     }
    
 }

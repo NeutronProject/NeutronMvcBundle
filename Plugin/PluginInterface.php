@@ -1,7 +1,7 @@
 <?php
 namespace Neutron\MvcBundle\Plugin;
 
-use Neutron\MvcBundle\Model\Plugin\PluginManagerInterface;
+use Neutron\ComponentBundle\Model\ManagerInteface;
 
 use Neutron\MvcBundle\Panel\PanelInterface;
 
@@ -41,7 +41,7 @@ interface PluginInterface
     
     public function getFrontController();
     
-    public function setManager(PluginManagerInterface $manager);
+    public function setManager(ManagerInteface $manager);
     
     public function getManager();
     

@@ -25,18 +25,14 @@ class Category
     protected $translator;
     
     protected $router;
-    
-    protected $applicationHelper;
 
-
-    public function __construct (FactoryInterface $factory, CategoryManagerInterface $categoryManager, TranslatorInterface $translator, Router $router, 
-            ApplicationHelper $applicationHelper)
+    public function __construct (FactoryInterface $factory, CategoryManagerInterface $categoryManager, 
+            TranslatorInterface $translator, Router $router)
     {
         $this->factory = $factory;
         $this->categoryManager = $categoryManager;
         $this->translator = $translator;
         $this->router = $router;
-        $this->applicationHelper = $applicationHelper;
     }
 
     public function build ()

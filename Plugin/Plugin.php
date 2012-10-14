@@ -1,9 +1,9 @@
 <?php 
 namespace Neutron\MvcBundle\Plugin;
 
-use Neutron\MvcBundle\Model\MvcManagerInterface;
+use Neutron\ComponentBundle\Model\ManagerInteface;
 
-use Neutron\MvcBundle\Model\Plugin\PluginManagerInterface;
+use Neutron\MvcBundle\Model\MvcManagerInterface;
 
 use Neutron\MvcBundle\Panel\PanelInterface;
 
@@ -127,7 +127,7 @@ class Plugin implements PluginInterface
         return $this->frontController;
     }
     
-    public function setManager(PluginManagerInterface $manager)
+    public function setManager(ManagerInteface $manager)
     {
         $this->manager = $manager;
         return $this;

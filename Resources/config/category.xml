@@ -42,14 +42,14 @@
         </service>
 
         <service id="neutron_mvc.form.handler.category.default" class="%neutron_mvc.form.handler.category.default.class%" 
-        	parent="neutron_component.form.handler"
-        	scope="request" 
         	public="false"
         >
-            <argument type="service" id="neutron_mvc.plugin_provider" />
             <argument type="service" id="neutron_tree.manager.factory" />
 			<argument>%neutron_mvc.category.category_class%</argument>
 			
+			<call method="setContainer">
+				<argument type="service" id="service_container" />
+			</call>
 			<call method="setForm">
 				<argument type="service" id="neutron_mvc.form.category" />
 			</call>
@@ -66,7 +66,6 @@
         	<argument type="service" id="neutron_mvc.category.manager" />
         	<argument type="service" id="translator" />
         	<argument type="service" id="router" />
-        	<argument type="service" id="neutron_admin.helper.application" />
         </service>
         
         <service id="neutron_mvc.datagrid.builder.category" 

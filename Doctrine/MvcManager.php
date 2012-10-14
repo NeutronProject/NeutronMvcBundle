@@ -38,7 +38,7 @@ class MvcManager implements MvcManagerInterface
     
     public function getWidgetReferencesByPanel($pluginInstanceId, $pluginIdentifier, $strategyPanelName)
     {
-        return $this->widgetReferenceRepository->getWidgetReferencesByPanel(
+        return $this->getWidgetReferenceRepository()->getWidgetReferencesByPanel(
             $pluginInstanceId, $pluginIdentifier, $strategyPanelName
         );
     }
@@ -112,6 +112,15 @@ class MvcManager implements MvcManagerInterface
         }
     
         return $this;
+    }
+    
+    public function getWidgetReferenceRepository()
+    {
+        if (null === $this->widgetReferenceRepository){
+            return $this->widgetReferenceRepository = $this->om->getRepository(self::WIDGET_REFERENCE);
+        }
+        
+        return $this->widgetReferenceRepository;
     }
    
     protected function takeSnapshot(array $widgetReferences)
