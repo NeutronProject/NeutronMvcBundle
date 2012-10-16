@@ -74,7 +74,6 @@ class CategoryCommand extends ContainerAwareCommand
     protected function createRoot(TreeManagerInterface $manager, $title, OutputInterface $output)
     {
         $root = $manager->createNode();
-        $root->setName('ROOT');
         $root->setTitle($title);
         $root->setSlug($title);
         $root->setType('root');
@@ -92,7 +91,6 @@ class CategoryCommand extends ContainerAwareCommand
         if ($recreate){
             $manager->deleteNode($root);
             $root = $manager->createNode();
-            $root->setName('ROOT');
             $root->setTitle($title);
             $root->setSlug($title);
             $root->setType('root');
@@ -101,7 +99,6 @@ class CategoryCommand extends ContainerAwareCommand
             $manager->persistNode($root);
             $output->writeln('Root node has beed recreated.');
         } else {
-            $root->setName('ROOT');
             $root->setTitle($title);
             $root->setSlug($title);
             $root->setType('root');

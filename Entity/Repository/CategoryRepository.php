@@ -61,8 +61,8 @@ class CategoryRepository extends NestedTreeRepository
     public function getCategories(AclManagerInterface $aclManager, $useTranslatable, $locale)
     {
         $qb = $this->getChildrenQueryBuilder();
-        $qb->andWhere('node.enabled = :enabled AND node.displayed = :displayed');
-        $qb->setParameters(array('enabled' => true, 'displayed' => true));
+        $qb->andWhere('node.enabled = :enabled AND node.displayed = :displayed AND node.type <> :type');
+        $qb->setParameters(array('enabled' => true, 'displayed' => true, 'type' => 'root'));
     
         $query = $qb->getQuery();
         
@@ -90,6 +90,16 @@ class CategoryRepository extends NestedTreeRepository
         }
     
         return $query->getArrayResult();
+    }
+    
+    public function getRoot()
+    {
+        $roots = $this->getRootNodesQuery()->getArrayResult();
+        if (!count($roots)){
+            throw new \RuntimeException('NO roots were found.');
+        } 
+        
+        return $roots[0];
     }
     
     public function generateCacheId($slug, $locale)

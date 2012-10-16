@@ -70,8 +70,10 @@ class CategoryManager implements CategoryManagerInterface
     
     public function buildNavigation()
     {
+        $root = $this->repository->getRoot();
         $categories = $this->getCategories();
-        
+        array_unshift($categories, $root);
+        //var_dump($categories); die;
         $nestedTree = array();
         $l = 0;
     
