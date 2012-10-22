@@ -61,13 +61,26 @@ class AdminMenuListener
         
         foreach ($this->pluginProvider->all() as $plugin){
             
+            if (count($plugin->getBackendPages()) == 0){
+                continue;
+            }
+            
             $pluginMenu->addChild($plugin->getName(), array(
                 'label' => $plugin->getLabel(),
-                'route' => $plugin->getAdministrationRoute(),
                 'extras' => array(
-                    'breadcrumbs' => true,
+                    'section' => true,
                 ),
             ));
+            
+            foreach($plugin->getBackendPages() as $backendPage){
+                $pluginMenu->addChild($backendPage['name'], array(
+                    'label' => $backendPage['label'],
+                    'route' => $backendPage['route'],
+                    'extras' => array(
+                        'breadcrumbs' => true,
+                    ),
+                ));
+            } 
         }
         
         $pluginMenu->moveToPosition(2);

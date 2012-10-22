@@ -32,6 +32,8 @@ class Plugin implements PluginInterface
     
     protected $panels = array();
     
+    protected $backendPages = array();
+    
     protected $treeOptions = array();
     
     protected $extraData = array();
@@ -168,7 +170,7 @@ class Plugin implements PluginInterface
     public function addPanel(PanelInterface $panel)
     {
         if ($this->hasPanel($panel->getName())){
-            throw new \InvalidArgumentException(sprintf('Panel with name "%s" alreadt exists.'));
+            throw new \InvalidArgumentException(sprintf('Panel with name "%s" alreadt exists.', $panel->getName()));
         }
         
         $this->panels[$panel->getName()] = $panel;
@@ -199,6 +201,54 @@ class Plugin implements PluginInterface
     public function removePanels()
     {
         $this->panels = array();
+        return $this;
+    }
+    
+    public function hasBackendPage($name)
+    {
+        return array_key_exists($name, $this->backendPages);
+    }
+    
+    public function getBackendPage($name)
+    {
+        if (!$this->hasBackendPage($name)){
+            throw new \InvalidArgumentException(sprintf('Backend page with name "%s" alreadt exists.', $name));
+        }
+        
+        return $this->backendPages[$name];
+    }
+    
+    public function addBackendPage(array $page)
+    {
+        $resolved = $this->resolvePage($page);
+        
+        $this->backendPages[$resolved['name']] = $resolved;
+        return $this;
+    }
+    
+    public function getBackendPages()
+    {
+        return $this->backendPages;
+    }
+    
+    public function setBackendPages(array $pages)
+    {
+        foreach ($pages as $page){
+            $this->addBackendPage($page);
+        }
+        
+        return $this;
+    }
+    
+    public function removeBackendPage($name)
+    {
+        unset($this->backendPages[$name]);
+        return $this;
+    }
+    
+    public function removeAllBackedPages()
+    {
+        $this->backendPages = array();
         return $this;
     }
     
@@ -237,6 +287,26 @@ class Plugin implements PluginInterface
         if (empty($value)){
             throw new \InvalidArgumentException(sprintf('Property "%s" is empty.', $propertyName));
         }
+    }
+    
+    protected function resolvePage(array $page)
+    {
+        $resolver = new OptionsResolver();
+        
+        $resolver->setRequired(array(
+            'name', 'label', 'route'
+        ));
+        
+        $resolver->setDefaults(array('displayed' => false));
+        
+        $resolver->setAllowedTypes(array(
+            'name'      => 'string',
+            'label'     => 'string',
+            'route'     => 'string',
+            'displayed' => 'bool',
+        ));
+        
+        return $resolver->resolve($page);
     }
     
     protected function resolveTreeOptions(array $options)
