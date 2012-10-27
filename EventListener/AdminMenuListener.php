@@ -105,15 +105,30 @@ class AdminMenuListener
         ));
         
         foreach ($this->widgetProvider->all() as $widget){
+      
+            if (count($widget->getBackendPages()) == 0){
+                continue;
+            }
             
             $widgetMenu->addChild($widget->getName(), array(
                 'label' => $widget->getLabel(),
-                'route' => $widget->getAdministrationRoute(),
                 'extras' => array(
-                    'breadcrumbs' => true,
+                    'section' => true,
                 ),
             ));
+            
+            foreach($widget->getBackendPages() as $backendPage){
+                $widgetMenu->addChild($backendPage['name'], array(
+                    'label' => $backendPage['label'],
+                    'route' => $backendPage['route'],
+                    'extras' => array(
+                        'breadcrumbs' => true,
+                    ),
+                ));
+            }
         }
+        
+        
         
         $widgetMenu->moveToPosition(3);
     }

@@ -1,6 +1,8 @@
 <?php 
 namespace Neutron\MvcBundle\Widget;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
 use Neutron\MvcBundle\Plugin\PluginInterface;
 
 use Neutron\MvcBundle\Panel\PanelInterface;
@@ -19,6 +21,8 @@ class Widget implements WidgetInterface
     
     protected $frontControler;
     
+    protected $forward;
+    
     protected $manager;
     
     protected $pluginAware = false;
@@ -32,6 +36,8 @@ class Widget implements WidgetInterface
     protected $javascriptAssets = array();
     
     protected $stylesheetAssets = array();
+    
+    protected $backendPages = array();
 
 
     public function __construct($name)
@@ -95,6 +101,17 @@ class Widget implements WidgetInterface
     public function getFrontController()
     {
         return $this->frontControler;
+    }
+    
+    public function setForward($forward)
+    {
+        $this->forward = (string) $forward;
+        return $this;
+    }
+    
+    public function getForward()
+    {
+        return $this->forward;
     }
     
     public function setManager(WidgetManagerInterface $manager) 
@@ -203,6 +220,74 @@ class Widget implements WidgetInterface
     public function getStylesheetAssets()
     {
         return $this->stylesheetAssets;
+    }
+    
+    public function hasBackendPage($name)
+    {
+        return array_key_exists($name, $this->backendPages);
+    }
+    
+    public function getBackendPage($name)
+    {
+        if (!$this->hasBackendPage($name)){
+            throw new \InvalidArgumentException(sprintf('Backend page with name "%s" alreadt exists.', $name));
+        }
+    
+        return $this->backendPages[$name];
+    }
+    
+    public function addBackendPage(array $page)
+    {
+        $resolved = $this->resolvePage($page);
+    
+        $this->backendPages[$resolved['name']] = $resolved;
+        return $this;
+    }
+    
+    public function getBackendPages()
+    {
+        return $this->backendPages;
+    }
+    
+    public function setBackendPages(array $pages)
+    {
+        foreach ($pages as $page){
+            $this->addBackendPage($page);
+        }
+    
+        return $this;
+    }
+    
+    public function removeBackendPage($name)
+    {
+        unset($this->backendPages[$name]);
+        return $this;
+    }
+    
+    public function removeAllBackedPages()
+    {
+        $this->backendPages = array();
+        return $this;
+    }
+    
+    protected function resolvePage(array $page)
+    {
+        $resolver = new OptionsResolver();
+    
+        $resolver->setRequired(array(
+            'name', 'label', 'route'
+        ));
+    
+        $resolver->setDefaults(array('displayed' => false));
+    
+        $resolver->setAllowedTypes(array(
+            'name'      => 'string',
+            'label'     => 'string',
+            'route'     => 'string',
+            'displayed' => 'bool',
+        ));
+    
+        return $resolver->resolve($page);
     }
 
     protected function validateProperty($value, $propertyName)
