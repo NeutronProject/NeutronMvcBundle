@@ -22,6 +22,8 @@ class CategoryManager implements CategoryManagerInterface
     
     protected $om;
     
+    protected $pluginProvider;
+    
     protected $repository;
     
     protected $cache;
@@ -36,10 +38,11 @@ class CategoryManager implements CategoryManagerInterface
     
     protected $translatable;
     
-    public function __construct(ObjectManager $om, Request $request,
+    public function __construct(ObjectManager $om, PluginProviderInterface $pluginProvider, Request $request,
              AclManagerInterface $aclManager, $className, $translatable)
     {
         $this->om = $om;
+        $this->pluginProvider = $pluginProvider;
         $this->repository = $om->getRepository($className);
         $this->cache = $om->getConfiguration()->getResultCacheImpl();
         $this->request = $request;
@@ -80,15 +83,35 @@ class CategoryManager implements CategoryManagerInterface
         if (count($categories) > 0) {
             $stack = array();
             foreach ($categories as $category) {
-                $item = array(
-                    'name' => $category['type'] . $category['id'],
-                    'label' => $category['title'],
-                    'route' => 'neutron_mvc.distributor',
-                    'routeParameters' => array('slug' => $category['slug']),
-                    'display' => $category['displayed'],                    
-                    'lvl' => $category['lvl'],
-                    'children' => array()   
-                );
+                
+                if ($category['type'] == 'root'){
+                    $item = array(
+                        'name' => $category['type'] . $category['id'],
+                        'label' => $category['title'],
+                        'uri' => $category['slug'],
+                        'display' => $category['displayed'],
+                        'lvl' => $category['lvl'],
+                        'children' => array()
+                    );
+                } else {
+                    
+                    if (!$this->pluginProvider->has($category['type'])){
+                        continue;
+                    }
+                    
+                    $plugin = $this->pluginProvider->get($category['type']);
+                    
+                    $item = array(
+                        'name' => $category['type'] . $category['id'],
+                        'label' => $category['title'],
+                        'route' => $plugin->getFrontendRoute(),
+                        'routeParameters' => array('slug' => $category['slug']),
+                        'display' => $category['displayed'],
+                        'lvl' => $category['lvl'],
+                        'children' => array()
+                    );
+                }
+                
           
                 // Number of stack items
                 $l = count($stack);
@@ -112,8 +135,8 @@ class CategoryManager implements CategoryManagerInterface
                 }
             }
         }
-    
-        if (count($nestedTree) > 0){
+        
+        if (count($nestedTree) > 0){ 
             return $nestedTree[0];
         }
         
@@ -124,5 +147,10 @@ class CategoryManager implements CategoryManagerInterface
     {   
         return $this->repository
             ->getCategories($this->aclManager, $this->translatable, $this->request->getLocale());
+    }
+    
+    public function findOneByCategorySlug($entityName, $slug, $locale)
+    {
+        return $this->repository->findOneByCategorySlug($entityName, $slug, $locale, $this->translatable);
     }
 }

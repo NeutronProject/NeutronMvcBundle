@@ -1,11 +1,11 @@
 {% extends "NeutronAdminBundle::layout.html.twig" %}
 
 {% block javascripts %}
-    {{ neutron_append_javascript('bundles/neutronlayout/backend/category/index.js') }}
+    {{ neutron_append_javascript('bundles/neutronmvc/js/backend/category/index.js') }}
     {{ parent() }}
 {% endblock %}
 
-{% block headTitle %} {% trans from "NeutronLayoutBundle" %}head_title{% endtrans %} {% endblock %}
+{% block headTitle %} {% trans from "NeutronMvcBundle" %}head_title{% endtrans %} {% endblock %}
 
 {% block headDesc %}
     <h1 class="icon dashboard">
@@ -18,7 +18,7 @@
     <div class="grid12">
         <article class="panel">
             <header class="divider">
-         	    <h2>{% trans from "NeutronLayoutBundle" %}subheader{% endtrans %}</h2>
+         	    <h2>{% trans from "NeutronMvcBundle" %}subheader{% endtrans %}</h2>
          	</header>
          	<div class="grid3">
         		<div class="block">

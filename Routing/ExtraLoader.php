@@ -44,7 +44,7 @@ class ExtraLoader implements LoaderInterface
         $this->addCategoryDeleteRoute($routes);
         $this->addWidgetInstancesRoute($routes);
         
-        $this->addDistributorRoute($routes);
+        //$this->addDistributorRoute($routes);
         $this->addHomeRoute($routes);
 
         return $routes;

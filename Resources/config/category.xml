@@ -88,6 +88,7 @@
         	class="%neutron_mvc.category.manager.default.class%" 
         	scope="request">
             <argument type="service" id="object_manager" />
+            <argument type="service" id="neutron_mvc.plugin_provider" />
             <argument type="service" id="request" />
             <argument type="service" id="neutron_admin.acl.manager" />
             <argument>%neutron_mvc.category.category_class%</argument>

@@ -24,10 +24,10 @@ class Navigation extends ContainerAware
             ->setUri($this->container->get('request')->getRequestUri());
       
         $pages = $this->container->get('neutron_mvc.category.manager')->buildNavigation();
-        
+  
         $menu = $factory->createFromArray($pages);
         $root = $menu->getRoot();
-        
+
         $home = $factory->createItem('home', array(
             'label' => $this->container->get('translator')->trans('menu.home', array(), 'NeutronMvcBundle'),
             'route' => 'frontend_home',

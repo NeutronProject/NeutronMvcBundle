@@ -102,6 +102,45 @@ class CategoryRepository extends NestedTreeRepository
         return $roots[0];
     }
     
+    public function findOneByCategorySlugQueryBuilder($entityName, $slug)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('p,c')
+            ->from($entityName, 'p')
+            ->innerJoin('p.category', 'c')
+            ->where('c.slug = ?1 AND c.enabled = ?2')
+            ->setParameters(array(1 => $slug, 2 => true))
+        ;
+    
+        return $qb;
+    }
+    
+    public function findOneByCategorySlugQuery($entityName, $slug, $locale, $useTranslatable)
+    {
+        $query = $this->findOneByCategorySlugQueryBuilder($entityName, $slug)->getQuery();
+    
+        if ($useTranslatable){
+            $query->setHint(
+                Query::HINT_CUSTOM_OUTPUT_WALKER,
+                'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker'
+            );
+    
+            $query->setHint(
+                \Gedmo\Translatable\TranslatableListener::HINT_TRANSLATABLE_LOCALE,
+                $locale
+            );
+        }
+    
+        return $query;
+    
+    }
+    
+    public function findOneByCategorySlug($entityName, $slug, $locale, $useTranslatable)
+    {
+        return $this->findOneByCategorySlugQuery($entityName, $slug, $locale, $useTranslatable)->getOneOrNullResult();
+    }
+    
     public function generateCacheId($slug, $locale)
     {
         return md5($this->getClassName()) . '_' . md5($slug . $locale);

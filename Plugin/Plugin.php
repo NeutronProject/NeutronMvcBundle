@@ -20,6 +20,8 @@ class Plugin implements PluginInterface
     
     protected $administrationRoute;
     
+    protected $frontendRoute;
+    
     protected $updateRoute;
     
     protected $deleteRoute;
@@ -90,6 +92,18 @@ class Plugin implements PluginInterface
     {
         $this->validateProperty($this->administrationRoute, 'administrationRoute');
         return $this->administrationRoute;
+    }
+    
+    public function setFrontendRoute($frontendRoute)
+    {
+        $this->frontendRoute = (string) $frontendRoute;
+        return $this;
+    }
+    
+    public function getFrontendRoute()
+    {
+        $this->validateProperty($this->frontendRoute, 'frontendRoute');
+        return $this->frontendRoute;
     }
        
     public function setUpdateRoute($route)

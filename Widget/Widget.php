@@ -9,7 +9,7 @@ use Neutron\MvcBundle\Panel\PanelInterface;
 
 use Neutron\MvcBundle\Model\Widget\WidgetManagerInterface;
 
-class Widget implements WidgetInterface
+class Widget implements WidgetInterface 
 {   
     protected $name;
     
@@ -38,6 +38,8 @@ class Widget implements WidgetInterface
     protected $stylesheetAssets = array();
     
     protected $backendPages = array();
+    
+    protected $extraData = array();
 
 
     public function __construct($name)
@@ -268,6 +270,25 @@ class Widget implements WidgetInterface
     {
         $this->backendPages = array();
         return $this;
+    }
+    
+    public function setExtraData(array $data)
+    {
+        $this->extraData = $data;
+        return $this;
+    }
+    
+    public function getExtraData($key = null)
+    {
+        if ($key){
+            if (isset($this->extraData[$key])){
+                return $this->extraData[$key];
+            } else {
+                throw new \InvalidArgumentException(sprintf('Key: "%s" does not exist.', $key));
+            }
+        }
+    
+        return $this->extraData;
     }
     
     protected function resolvePage(array $page)
